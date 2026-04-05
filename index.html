@@ -180,7 +180,7 @@
       chatLog.scrollTop = chatLog.scrollHeight;
 
       try {
-        const response = await fetch('http://127.0.0.1:8000/talk-to-prince', {
+        const response = await fetch('https://royal-journal.onrender.com', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: message })
@@ -200,7 +200,7 @@
 
     async function loadJournalHistory() {
       try {
-        const response = await fetch('http://127.0.0.1:8000/get-journal');
+        const response = await fetch('https://royal-journal.onrender.com/');
         const data = await response.json();
         const container = document.getElementById('journal-entries-container');
         container.innerHTML = ''; 
