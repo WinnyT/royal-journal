@@ -180,7 +180,8 @@
       chatLog.scrollTop = chatLog.scrollHeight;
 
       try {
-        const response = await fetch('https://royal-journal.onrender.com', {
+        // FIXED: Added /talk-to-prince back to the URL
+        const response = await fetch('https://royal-journal.onrender.com/talk-to-prince', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: message })
@@ -200,7 +201,8 @@
 
     async function loadJournalHistory() {
       try {
-        const response = await fetch('https://royal-journal.onrender.com/');
+        // FIXED: Added /get-journal back to the URL
+        const response = await fetch('https://royal-journal.onrender.com/get-journal');
         const data = await response.json();
         const container = document.getElementById('journal-entries-container');
         container.innerHTML = ''; 
@@ -210,9 +212,7 @@
           return;
         }
 
-        // Loop through and build HTML with Edit/Delete/Color controls
         data.entries.forEach(entry => {
-          // If the entry has no color (from before we added the column), default to pale gold
           const bgColor = entry.color || '#fff8e1'; 
           
           container.innerHTML += `
@@ -243,45 +243,41 @@
       container.prepend(loadingDiv);
 
       try {
-        await fetch('http://127.0.0.1:8000/summarize-day', { method: 'POST' });
+        // FIXED: Updated to Render URL
+        await fetch('https://royal-journal.onrender.com/summarize-day', { method: 'POST' });
         loadJournalHistory();
       } catch (error) {
         loadingDiv.innerHTML = "<span style='color: red;'>Failed to record event.</span>";
       }
     }
 
-    // --- NEW: Delete Function ---
     async function deleteEntry(id) {
       if (!confirm("Are you sure you want to permanently delete this memory?")) return;
-      
-      await fetch(`http://127.0.0.1:8000/delete-journal/${id}`, { method: 'DELETE' });
-      loadJournalHistory(); // Reload to remove it from the screen
+      // FIXED: Updated to Render URL
+      await fetch(`https://royal-journal.onrender.com/delete-journal/${id}`, { method: 'DELETE' });
+      loadJournalHistory(); 
     }
 
-    // --- NEW: Edit Text Function ---
     async function editEntryText(id) {
       const textElement = document.getElementById(`summary-text-${id}`);
       const currentText = textElement.innerText;
       
-      // Use a simple prompt for editing text quickly
       const newText = prompt("Edit your journal entry:", currentText);
       
       if (newText !== null && newText.trim() !== "") {
-        textElement.innerText = newText; // Update on screen immediately
-        updateEntry(id); // Send changes to the database
+        textElement.innerText = newText; 
+        updateEntry(id); 
       }
     }
 
-    // --- NEW: Save Updates (Text + Color) to Database ---
     async function updateEntry(id) {
       const currentText = document.getElementById(`summary-text-${id}`).innerText;
       const selectedColor = document.getElementById(`colorPicker-${id}`).value;
       
-      // Update the background color on the screen immediately
       document.getElementById(`entry-${id}`).style.backgroundColor = selectedColor;
 
-      // Send the update to Python
-      await fetch(`http://127.0.0.1:8000/update-journal/${id}`, {
+      // FIXED: Updated to Render URL
+      await fetch(`https://royal-journal.onrender.com/update-journal/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ summary: currentText, color: selectedColor })
