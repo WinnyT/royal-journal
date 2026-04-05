@@ -17,3 +17,4 @@ An AI-powered, aesthetically themed web journal that documents daily life throug
 
 **AI Integration (The Prince's Brain)**
 * Google Gemini API (Flash-Lite Model)
+<img width="1235" height="799" alt="image" src="https://github.com/user-attachments/assets/82c7d545-836f-4937-b410-484bcb0ea883" />
