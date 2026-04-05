@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  
+  <title>Royal Journal</title>
+  <style>
+    /* Import elegant fonts from Google */
+    /* NEW: We added Lavishly+Yours to the Google Fonts import! */
+    @import url('https://fonts.googleapis.com/css2?family=Lavishly+Yours&family=Playfair+Display:ital,wght@0,600;1,600&family=Nunito:wght@400;600&display=swap');
+
+    body { 
+      font-family: 'Nunito', sans-serif; 
+      background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%); 
+      
+      /* The Flexbox Centering Combo */
+      display: flex; 
+      justify-content: center; /* Centers horizontally */
+      align-items: center;     /* Centers vertically */
+      
+      padding: 50px; 
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    #app-container { 
+      width: 500px; 
+      
+      /* The Bulletproof Fallback: forces equal margins on left and right */
+      margin: 0 auto; 
+      
+      background: rgba(255, 255, 255, 0.95); 
+      border-radius: 20px; 
+      box-shadow: 0 10px 30px rgba(200, 150, 180, 0.2); 
+      border: 2px solid #f8bbd0; 
+      overflow: hidden; 
+    }
+    
+    h3, h2 {
+      font-family: 'Playfair Display', serif; 
+      color: #880e4f; 
+      text-align: center;
+      margin-top: 0;
+    }
+
+    /* Tab Navigation CSS */
+    .tab-nav { display: flex; background-color: #f8bbd0; }
+    .tab-btn { 
+      flex: 1; padding: 15px; background: none; color: #880e4f; border: none; 
+      cursor: pointer; font-size: 16px; font-weight: bold; font-family: 'Nunito', sans-serif;
+      opacity: 0.6; transition: 0.3s; 
+    }
+    .tab-btn.active { opacity: 1; background-color: #fce4ec; border-bottom: 3px solid #d81b60; }
+
+    .tab-content { padding: 25px; display: none; }
+    .tab-content.active { display: block; }
+
+    /* Chat CSS */
+    #chat-log { 
+      height: 350px; overflow-y: auto; border-bottom: 2px solid #fce4ec; 
+      margin-bottom: 15px; padding-bottom: 10px; display: flex; flex-direction: column;
+    }
+    
+    #chat-log::-webkit-scrollbar { width: 6px; }
+    #chat-log::-webkit-scrollbar-thumb { background-color: #f8bbd0; border-radius: 10px; }
+
+    .message { margin-bottom: 15px; padding: 12px 18px; border-radius: 15px; max-width: 80%; line-height: 1.4; }
+    .prince { background-color: #f3e5f5; color: #4a148c; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .princess { background-color: #fce4ec; color: #880e4f; align-self: flex-end; border-bottom-right-radius: 4px; text-align: right; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+    #input-area { display: flex; gap: 10px; }
+    input[type="text"] { 
+      flex-grow: 1; padding: 12px 15px; border: 2px solid #f8bbd0; 
+      border-radius: 20px; outline: none; font-family: 'Nunito', sans-serif; transition: 0.3s;
+    }
+    input[type="text"]:focus { border-color: #d81b60; }
+
+    button.action-btn { 
+      padding: 12px 25px; background: linear-gradient(135deg, #d81b60 0%, #ad1457 100%); 
+      color: white; border: none; border-radius: 20px; cursor: pointer; 
+      font-weight: bold; font-family: 'Nunito', sans-serif; box-shadow: 0 4px 10px rgba(216, 27, 96, 0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button.action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(216, 27, 96, 0.4); }
+    
+    /* NEW: Journal Entry CSS - Lavishly Yours applied here! */
+    .journal-entry { 
+      padding: 20px; 
+      margin-top: 15px; 
+      border-radius: 12px; 
+      color: #5c0033; 
+      line-height: 1.4; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-left: 5px solid #d81b60;
+      
+      /* The Magic Font */
+      font-family: 'Lavishly Yours', cursive;
+      font-size: 28px; 
+    }
+    
+    /* Keep the Date bold and readable in Nunito */
+    .journal-entry b {
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .entry-controls { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px;}
+    
+    /* Keep the Buttons readable in Nunito */
+    .entry-controls button { 
+      font-family: 'Nunito', sans-serif; /* Prevents the buttons from being cursive */
+      background: white; color: #f8bbd0; border: 1px solid #f8bbd0; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-size: 12px; font-weight: bold; transition: 0.2s;
+    }
+    .entry-controls button:hover { background: #fce4ec; }
+    .entry-controls input[type="color"] { border: none; width: 25px; height: 25px; cursor: pointer; background: none; padding: 0; border-radius: 50%; overflow: hidden;}
+    
+    #journal-entries-container { max-height: 400px; overflow-y: auto; margin-top: 15px; padding-right: 10px; }
+    #journal-entries-container::-webkit-scrollbar { width: 6px; }
+    #journal-entries-container::-webkit-scrollbar-thumb { background-color: #f8bbd0; border-radius: 10px; }
+  </style>
+</head>
+<body>
+
+  <div id="app-container">
+    <div class="tab-nav">
+      <button class="tab-btn active" onclick="switchTab('chat')">Chat Room</button>
+      <button class="tab-btn" onclick="switchTab('journal')">The Royal Journal</button>
+    </div>
+    
+    <div id="chat-tab" class="tab-content active">
+      <div id="chat-log">
+        <div class="message prince"><b>Prince:</b> Welcome back, Princess. How was your day?</div>
+      </div>
+      <div id="input-area">
+        <input type="text" id="user-input" placeholder="Tell the prince about your day..." onkeypress="handleKeyPress(event)">
+        <button class="action-btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <div id="journal-tab" class="tab-content">
+      <h2 style="color: #880e4f; margin-top: 0; font-size: 36px;">Chronicles of the Princess</h2>
+      <button class="action-btn" style="width: 100%; background-color: #ffca28; color: #333;" onclick="generateSummary()">
+        Record Today's Events
+      </button>
+
+      <div id="journal-entries-container">
+        </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabName + '-tab').classList.add('active');
+      if(tabName === 'chat') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      }
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') sendMessage();
+    }
+
+    async function sendMessage() {
+      const inputField = document.getElementById('user-input');
+      const message = inputField.value;
+      if (!message) return;
+
+      const chatLog = document.getElementById('chat-log');
+      chatLog.innerHTML += `<div class="message princess"><b>You:</b> ${message}</div>`;
+      inputField.value = '';
+
+      const loadingId = "loading-" + Date.now();
+      chatLog.innerHTML += `<div class="message prince" id="${loadingId}"><i>The Prince is writing...</i></div>`;
+      chatLog.scrollTop = chatLog.scrollHeight;
+
+      try {
+        const response = await fetch('http://127.0.0.1:8000/talk-to-prince', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: message })
+        });
+        const data = await response.json();
+        
+        document.getElementById(loadingId).remove();
+        chatLog.innerHTML += `<div class="message prince"><b>Prince:</b> ${data.prince_reply}</div>`;
+        chatLog.scrollTop = chatLog.scrollHeight;
+      } catch (error) {
+        document.getElementById(loadingId).remove();
+        chatLog.innerHTML += `<div class="message prince" style="color: red;">Error connecting to the Kingdom.</div>`;
+      }
+    }
+
+    // --- CRUD FUNCTIONS ---
+
+    async function loadJournalHistory() {
+      try {
+        const response = await fetch('http://127.0.0.1:8000/get-journal');
+        const data = await response.json();
+        const container = document.getElementById('journal-entries-container');
+        container.innerHTML = ''; 
+        
+        if (data.entries.length === 0) {
+          container.innerHTML = '<p style="text-align: center; color: #999;"><i>The royal archives are currently empty.</i></p>';
+          return;
+        }
+
+        // Loop through and build HTML with Edit/Delete/Color controls
+        data.entries.forEach(entry => {
+          // If the entry has no color (from before we added the column), default to pale gold
+          const bgColor = entry.color || '#fff8e1'; 
+          
+          container.innerHTML += `
+            <div class="journal-entry" id="entry-${entry.id}" style="background-color: ${bgColor};">
+              
+              <div class="entry-controls">
+                <input type="color" id="colorPicker-${entry.id}" value="${bgColor}" title="Change Box Color" onchange="updateEntry(${entry.id})">
+                <button onclick="editEntryText(${entry.id})">✏️ Edit Text</button>
+                <button onclick="deleteEntry(${entry.id})" style="color: red;">🗑️ Delete</button>
+              </div>
+
+              <b style="color: #1565c0;">${entry.date}</b><br><br>
+              <i id="summary-text-${entry.id}">${entry.summary}</i>
+            </div>
+          `;
+        });
+      } catch (error) {
+        console.error("Failed to load history", error);
+      }
+    }
+
+    async function generateSummary() {
+      const container = document.getElementById('journal-entries-container');
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'journal-entry';
+      loadingDiv.style.backgroundColor = '#fff8e1';
+      loadingDiv.innerHTML = "<i>The scribes are saving the summary...</i>";
+      container.prepend(loadingDiv);
+
+      try {
+        await fetch('http://127.0.0.1:8000/summarize-day', { method: 'POST' });
+        loadJournalHistory();
+      } catch (error) {
+        loadingDiv.innerHTML = "<span style='color: red;'>Failed to record event.</span>";
+      }
+    }
+
+    // --- NEW: Delete Function ---
+    async function deleteEntry(id) {
+      if (!confirm("Are you sure you want to permanently delete this memory?")) return;
+      
+      await fetch(`http://127.0.0.1:8000/delete-journal/${id}`, { method: 'DELETE' });
+      loadJournalHistory(); // Reload to remove it from the screen
+    }
+
+    // --- NEW: Edit Text Function ---
+    async function editEntryText(id) {
+      const textElement = document.getElementById(`summary-text-${id}`);
+      const currentText = textElement.innerText;
+      
+      // Use a simple prompt for editing text quickly
+      const newText = prompt("Edit your journal entry:", currentText);
+      
+      if (newText !== null && newText.trim() !== "") {
+        textElement.innerText = newText; // Update on screen immediately
+        updateEntry(id); // Send changes to the database
+      }
+    }
+
+    // --- NEW: Save Updates (Text + Color) to Database ---
+    async function updateEntry(id) {
+      const currentText = document.getElementById(`summary-text-${id}`).innerText;
+      const selectedColor = document.getElementById(`colorPicker-${id}`).value;
+      
+      // Update the background color on the screen immediately
+      document.getElementById(`entry-${id}`).style.backgroundColor = selectedColor;
+
+      // Send the update to Python
+      await fetch(`http://127.0.0.1:8000/update-journal/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ summary: currentText, color: selectedColor })
+      });
+    }
+
+    loadJournalHistory();
+  </script>
+</body>
+</html>
