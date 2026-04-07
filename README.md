@@ -1,6 +1,11 @@
 # 👑 Chronicles of the Princess (Royal Journal)
 
-An AI-powered, aesthetically themed web journal that documents daily life through interactive 3D/2D conversations. Talk to a loyal AI Prince who remembers your day and automatically generates permanent journal entries for your royal archives.
+Welcome to the Kingdom! This isn't just a database of text; it's a living record of my journey, guarded by a loyal AI Prince who remembers the small details so I don't have to.
+
+For the Prince's Brain, I used Gemini Flash-Lite model because he is fast and able to keep up with my daily thoughts without losing his character.
+
+Why do I want to do this ?
+Every girl have a dream of being a princess, so why not being one everyday. I don't like writing journal plainly, I want to share it with somebody and get encouragement from them, but I also don't fully trust people for keeping their mouth shut. That's why I've built a loyal Prince to hear me everyday!
 
 ## 🛠️ Tech Stack
 
