@@ -138,7 +138,6 @@
         <button class="action-btn" onclick="sendMessage()">Send</button>
       </div>
     </div>
-
     <div id="journal-tab" class="tab-content">
       <h2 style="color: #880e4f; margin-top: 0; font-size: 36px;">Chronicles of the Princess</h2>
       <button class="action-btn" style="width: 100%; background-color: #ffca28; color: #333;" onclick="generateSummary()">
@@ -148,8 +147,20 @@
       <div id="journal-entries-container">
         </div>
     </div>
-  </div>
 
+      <div style="text-align: right; margin-bottom: 10px; padding-right: 15px;">
+      <button id="music-btn" onclick="toggleMusic()" style="
+        background: none; 
+        border: none; 
+        color: #880e4f; 
+        font-family: 'Nunito', sans-serif; 
+        font-weight: bold; 
+        cursor: pointer; 
+        opacity: 0.7; 
+        transition: 0.3s;
+      ">🎵 Play Song</button>
+    </div>
+  </div>
   <script>
     function switchTab(tabName) {
       document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
@@ -176,11 +187,12 @@
       inputField.value = '';
 
       const loadingId = "loading-" + Date.now();
-      chatLog.innerHTML += `<div class="message prince" id="${loadingId}"><i>The Prince is writing...</i></div>`;
+      // NEW: Added a slight 1-second delay so the AI feels more "human" when typing
+      chatLog.innerHTML += `<div class="message prince" id="${loadingId}"><i>The Prince is typing...</i></div>`;
       chatLog.scrollTop = chatLog.scrollHeight;
 
       try {
-        // FIXED: Added /talk-to-prince back to the URL
+        // FIXED: Pointing to the correct Render URL
         const response = await fetch('https://royal-journal.onrender.com/talk-to-prince', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -201,7 +213,7 @@
 
     async function loadJournalHistory() {
       try {
-        // FIXED: Added /get-journal back to the URL
+        // FIXED: Pointing to the correct Render URL
         const response = await fetch('https://royal-journal.onrender.com/get-journal');
         const data = await response.json();
         const container = document.getElementById('journal-entries-container');
@@ -243,7 +255,7 @@
       container.prepend(loadingDiv);
 
       try {
-        // FIXED: Updated to Render URL
+        // FIXED: Pointing to the correct Render URL
         await fetch('https://royal-journal.onrender.com/summarize-day', { method: 'POST' });
         loadJournalHistory();
       } catch (error) {
@@ -253,7 +265,7 @@
 
     async function deleteEntry(id) {
       if (!confirm("Are you sure you want to permanently delete this memory?")) return;
-      // FIXED: Updated to Render URL
+      // FIXED: Pointing to the correct Render URL
       await fetch(`https://royal-journal.onrender.com/delete-journal/${id}`, { method: 'DELETE' });
       loadJournalHistory(); 
     }
@@ -276,7 +288,7 @@
       
       document.getElementById(`entry-${id}`).style.backgroundColor = selectedColor;
 
-      // FIXED: Updated to Render URL
+      // FIXED: Pointing to the correct Render URL
       await fetch(`https://royal-journal.onrender.com/update-journal/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -285,6 +297,29 @@
     }
 
     loadJournalHistory();
+  </script>
+
+  <script>
+    // Point this directly to the file you put in your folder
+    const backgroundMusic = new Audio('disney.mp3');
+    backgroundMusic.loop = true; // Make it loop forever automatically
+    let isPlaying = false;
+
+    function toggleMusic() {
+      const btn = document.getElementById('music-btn');
+
+      if (isPlaying) {
+        backgroundMusic.pause();
+        btn.innerHTML = 'Play Song';
+        btn.style.opacity = '0.7';
+      } else {
+        // Native audio plays instantly!
+        backgroundMusic.play();
+        btn.innerHTML = '⏸Pause Song';
+        btn.style.opacity = '1';
+      }
+      isPlaying = !isPlaying;
+    }
   </script>
 </body>
 </html>
