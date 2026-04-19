@@ -1,4 +1,4 @@
-# 👑 Chronicles of the Princess (Royal Journal)
+# Royal Journal
 
 Welcome to the Kingdom! This isn't just a database of text; it's a living record of my journey, guarded by a loyal AI Prince who remembers the small details so I don't have to.
 
@@ -7,18 +7,18 @@ For the Prince's Brain, I used Gemini Flash-Lite model because he is fast and ab
 Why do I want to do this ?
 Every girl have a dream of being a princess, so why not being one everyday. I don't like writing journal plainly, I want to share it with somebody and get encouragement from them, but I also don't fully trust people for keeping their mouth shut. That's why I've built a loyal Prince to hear me everyday!
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-**Frontend (The Kingdom)**
-* HTML5 / CSS3 (Custom Royal UI)
-* Vanilla JavaScript (ES6+)
+**Frontend**
+* HTML5 / CSS3 
+* Vanilla JavaScript 
 
-**Backend (The Scribes)**
+**Backend**
 * Python 3
 * FastAPI
 
-**Database (The Archives)**
-* SQLite (Local Storage)
+**Database**
+* SQLite 
 
 **AI Integration (The Prince's Brain)**
 * Google Gemini API (Flash-Lite Model)
